@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> dev Ahmed Wael</title>
+    <style>
+        body {
+            direction: rtl;
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        .welcome-message {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .company-logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .company-logo img {
+            width: 100px;
+            height: 100px;
+            margin-right: 10px;
+        }
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .buttons button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .buttons button:hover {
+            background-color: #45a049;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        .hidden {
+            display: none;
+        }
+        form label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        form input, form select {
+            width: 100%;
+            padding: 8px;
+            margin: 8px 0;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="welcome-message">
+            <h1>تم برمجة التطبيق بواسطة AhmedWael</h1>
+            <h3>جملة ماركت وفرة العملة واشتري بالجملة</h3>
+        </div>
+        <div class="company-logo">
+            <img src="logo.jfif">
+            <br>
+        </div>
+        <div class="buttons">
+            <button onclick="showEmployeeList()">قائمة الموظفين</button>
+            <button onclick="showAddEmployeeForm()">إضافة موظف جديد</button>
+            <button onclick="printEmployeeList()">طباعة</button>
+        </div>
+        <div id="employee-list" class="hidden">
+            <table id="employees-table">
+                <thead>
+                    <tr>
+                        <th>الكود الوظيفي</th>
+                        <th>اسم الموظف</th>
+                        <th>القسم</th>
+                        <th>رقم الهاتف</th>
+                        <th>العنوان</th>
+                        <th>تاريخ التعيين</th>
+                        <th>تعديل</th>
+                        <th>حذف</th>
+                    </tr>
+                </thead>
+                <tbody id="employees-body">
+                </tbody>
+            </table>
+        </div>
+        <div id="add-employee-form" class="hidden">
+            <h3>إضافة موظف جديد</h3>
+            <form id="employee-form">
+                <label for="employee-id">الكود الوظيفي:</label>
+                <input type="text" id="employee-id" required><br>
+                <label for="employee-name">اسم الموظف:</label>
+                <input type="text" id="employee-name" required><br>
+                <label for="department">القسم:</label>
+                <select id="department">
+                    <option value="الإدارة">الإدارة</option>
+                    <option value="المالية">المالية</option>
+                    <option value="المبيعات">المبيعات</option>
+                    <option value="الصيانة">الصيانة</option>
+                    <option value="البقالة">البقالة</option>
+                    <option value="العطارة">العطارة</option>
+                    <option value="الحلويات">الحلويات</option>
+                    <option value="المفروشات">المفروشات</option>
+                    <option value="التجميل">التجميل</option>
+                    <option value="المنظفات">المنظفات</option>
+                    <option value="جزارة بلدي ومستورد">جزارة بلدي ومستورد</option>
+                    <option value="المعلبات">المعلبات</option>
+                    <option value="الالكترونيات">الالكترونيات</option>
+                    <option value="الألبان">الألبان</option>
+                    <option value="الدوجان">الدوجان</option>
+                    <option value="الخضار والفاكهة">الخضار والفاكهة</option>
+                    <option value="إدارة الأمن">إدارة الأمن</option>
+                </select><br>
+                <label for="phone">رقم الهاتف:</label>
+                <input type="text" id="phone" required><br>
+                <label for="address">العنوان:</label>
+                <input type="text" id="address" required><br>
+                <label for="hire-date">تاريخ التعيين:</label>
+                <input type="date" id="hire-date" required><br>
+                <button type="button" onclick="addEmployee()">إضافة</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        const employees = [];
+
+function showEmployeeList() {
+    document.getElementById('employee-list').classList.remove('hidden');
+    document.getElementById('add-employee-form').classList.add('hidden');
+    renderEmployeeTable();
+}
+
+function showAddEmployeeForm() {
+    document.getElementById('employee-list').classList.add('hidden');
+    document.getElementById('add-employee-form').classList.remove('hidden');
+}
+
+function addEmployee() {
+    const id = document.getElementById('employee-id').value;
+    const name = document.getElementById('employee-name').value;
+    const department = document.getElementById('department').value;
+    const phone = document.getElementById('phone').value;
+    const address = document.getElementById('address').value;
+    const hireDate = document.getElementById('hire-date').value;
+
+    employees.push({ id, name, department, phone, address, hireDate });
+    renderEmployeeTable();
+    clearForm();
+}
+
+function renderEmployeeTable() {
+    const tbody = document.getElementById('employees-body');
+    tbody.innerHTML = '';
+    employees.forEach((employee, index) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${employee.id}</td>
+            <td>${employee.name}</td>
+            <td>${employee.department}</td>
+            <td>${employee.phone}</td>
+            <td>${employee.address}</td>
+            <td>${employee.hireDate}</td>
+            <td><button onclick="editEmployee(${index})">تعديل</button></td>
+            <td><button onclick="deleteEmployee(${index})">حذف</button></td>
+        `;
+        tbody.appendChild(row);
+    });
+}
+
+function clearForm() {
+    document.getElementById('employee-form').reset();
+}
+
+function editEmployee(index) {
+    const employee = employees[index];
+    document.getElementById('employee-id').value = employee.id;
+    document.getElementById('employee-name').value = employee.name;
+    document.getElementById('department').value = employee.department;
+    document.getElementById('phone').value = employee.phone;
+    document.getElementById('address').value = employee.address;
+    document.getElementById('hire-date').value = employee.hireDate;
+
+    employees.splice(index, 1);
+    showAddEmployeeForm();
+}
+
+function deleteEmployee(index) {
+    employees.splice(index, 1);
+    renderEmployeeTable();
+}
+
+function printEmployeeList() {
+    const printContent = document.getElementById('employee-list').innerHTML;
+    const originalContent = document.body.innerHTML;
+
+    document.body.innerHTML = printContent;
+    window.print();
+    document.body.innerHTML = originalContent;
+
+    showEmployeeList();
+}
+    </script>
+</body>
+</html>
